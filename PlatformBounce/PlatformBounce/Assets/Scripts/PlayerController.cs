@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using DG.Tweening;
 using EZCameraShake;
 public class PlayerController : MonoBehaviour {
 
     #region Variables
     [Header("Player Stats")]
     public float speed = 6.0F;
+    public float DeathTimer;
+    float velocity;
 
     public GameManager GM;
 
@@ -22,6 +26,9 @@ public class PlayerController : MonoBehaviour {
     private Vector3 moveDirection = Vector3.zero;
 
     private bool PlayerIsNeutral;
+    public Image DeathWhiteOut;
+    private bool PlayerNotHitPlatform;
+    private CameraShakeInstance PlayerDeathCameraShake;
 
 
     #endregion
@@ -49,16 +56,38 @@ public class PlayerController : MonoBehaviour {
         MaterialColor = gameObject.GetComponent<MeshRenderer>();
         ColorMatch = gameObject.GetComponent<MeshRenderer>();
 
+        DeathWhiteOut = DeathWhiteOut.gameObject.GetComponent<Image>();
+
     }
 
     void Update()
     {
+
         if (PlayerStarted == false)
         {
             PlayerStart();
         }
         SwitchColor();
         PlayerMovement();
+    
+       
+
+        if(PlayerNotHitPlatform == true)
+        {
+            PlayerDeathState();
+
+        }
+        else
+        {
+            PlayerDeathState();
+
+            DeathTimer = 0;
+        }
+
+    }
+    private void FixedUpdate()
+    {
+        velocity = rb.velocity.y;
 
     }
     void PlayerStart()
@@ -84,6 +113,8 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionExit(Collision col)
     {
+        PlayerNotHitPlatform = true;
+
         if (col.gameObject.name.Contains("Platform"))
         {
             PlatformCollisionExit.Invoke();
@@ -106,6 +137,10 @@ public class PlayerController : MonoBehaviour {
     }
     private void OnCollisionEnter(Collision col)
     {
+
+
+        PlayerNotHitPlatform = false;
+
         if (col.gameObject.tag == "Neutral_Platform")
         {
             Debug.Log("Color Reset");
@@ -145,6 +180,24 @@ public class PlayerController : MonoBehaviour {
             GM.CurrentStreak++;
             Debug.Log("Player green");
         }      
+    }
+
+    private void PlayerDeathState()
+    {
+        DeathTimer= DeathTimer+0.001f;
+        PlayerDeathCameraShake = CameraShaker.Instance.StartShake(1, 10, 1);
+
+        Debug.Log(PlayerDeathCameraShake.CurrentState);
+        if (PlayerStarted == true && velocity<-50)
+        {
+            DeathWhiteOut.color = new Color(1f, 1f, 1f, Mathf.PingPong(Time.fixedTime * -velocity * 0.002f*DeathTimer, 255f));
+            //PlayerDeathCameraShake.StartFadeIn(0);
+        }
+        else
+        {
+            DeathTimer = 0;
+            //DeathWhiteOut.color = new Color(1f, 1f, 1f, 0f);
+        }
     }
 
     void SwitchColor()

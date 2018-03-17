@@ -44,7 +44,7 @@ public class ChunkManager : MonoBehaviour
 
         if (placedChunksQueue.Count > numberOfChunksAhead + 7)
         {
-            GameObject oldestChunk = placedChunksQueue.Dequeue();
+            //GameObject oldestChunk = placedChunksQueue.Dequeue();
             
             
         }
