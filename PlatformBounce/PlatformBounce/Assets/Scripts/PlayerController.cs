@@ -185,9 +185,9 @@ public class PlayerController : MonoBehaviour {
     private void PlayerDeathState()
     {
         DeathTimer= DeathTimer+0.001f;
-        PlayerDeathCameraShake = CameraShaker.Instance.StartShake(1, 10, 1);
+        //PlayerDeathCameraShake = CameraShaker.Instance.StartShake(1, 10, 1);
 
-        Debug.Log(PlayerDeathCameraShake.CurrentState);
+        //Debug.Log(PlayerDeathCameraShake.CurrentState);
         if (PlayerStarted == true && velocity<-50)
         {
             DeathWhiteOut.color = new Color(1f, 1f, 1f, Mathf.PingPong(Time.fixedTime * -velocity * 0.002f*DeathTimer, 255f));
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour {
         else
         {
             DeathTimer = 0;
-            //DeathWhiteOut.color = new Color(1f, 1f, 1f, 0f);
+            DeathWhiteOut.color = new Color(1f, 1f, 1f, 0f);
         }
     }
 

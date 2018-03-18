@@ -16,7 +16,7 @@ public class PlatformDespawn : MonoBehaviour {
     {
 		if(gameObject.transform.position.y >GameObject.FindGameObjectWithTag("Player").transform.position.y+15f)
         {
-            Debug.Log("Despawning Platform");
+            //Debug.Log("Despawning Platform");
             gameObject.SetActive(false);
         }
 	}
