@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 public class GameManager : MonoBehaviour {
@@ -160,5 +161,11 @@ public class GameManager : MonoBehaviour {
         Score.text = "Score: " + CurrentStreak.ToString();
     }
   
+
+    public void GameOver()
+    {
+        Debug.Log("GAME OVER");
+        SceneManager.LoadScene(2);
+    }
 }
 
