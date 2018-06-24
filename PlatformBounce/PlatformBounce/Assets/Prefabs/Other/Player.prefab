@@ -984,6 +984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 12
+  DeathTimer: 0
   GM: {fileID: 0}
   Colors:
   - {fileID: 2100000, guid: 6986bf3c444f0c14695027459913bdf3, type: 2}
@@ -992,7 +993,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 290ad2e1378f7754d8026d5fd24843be, type: 2}
   - {fileID: 2100000, guid: aacfe726bab6f4e4c94ee2f4d84da037, type: 2}
   - {fileID: 2100000, guid: 1dd9df8352cbaa34e870fec35e41343b, type: 2}
-  DeathWhiteOut: {fileID: 0}
   playerColor: 0
   PlatformCollisionExit:
     m_PersistentCalls:
@@ -1010,6 +1010,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  DeathWhiteOut: {fileID: 0}
 --- !u!124 &124940481475938038
 Behaviour:
   m_ObjectHideFlags: 1

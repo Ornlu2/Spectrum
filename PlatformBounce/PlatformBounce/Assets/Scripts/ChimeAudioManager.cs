@@ -21,7 +21,7 @@ public class ChimeAudioManager : MonoBehaviour {
         Source.Play();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if(collision.gameObject.tag == "Neutral_Platform")
         {

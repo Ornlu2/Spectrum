@@ -3,14 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Neutral_Platform
-  - Kill_Platform
-  - Blue_Platform
-  - Red_Platform
-  - Green_Platform
-  - Purple_Platform
-  - Yellow_Platform
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -22,7 +15,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - ARKitPlane
   - 
   - 
   - 

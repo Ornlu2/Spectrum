@@ -25,8 +25,11 @@ public class PlayerController : MonoBehaviour {
 
     private Vector3 moveDirection = Vector3.zero;
 
+    public GameObject PlayerDeathPortalPosition;
+
     private bool PlayerIsNeutral;
     public Image DeathWhiteOut;
+    public Image DeathBlackOut;
     private bool PlayerNotHitPlatform;
     private CameraShakeInstance PlayerDeathCameraShake;
 
@@ -57,6 +60,8 @@ public class PlayerController : MonoBehaviour {
         ColorMatch = gameObject.GetComponent<MeshRenderer>();
 
         DeathWhiteOut = DeathWhiteOut.gameObject.GetComponent<Image>();
+        DeathBlackOut = DeathBlackOut.gameObject.GetComponent<Image>();
+
 
     }
 
@@ -111,7 +116,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void OnCollisionExit(Collision col)
+    private void OnTriggerExit(Collider col)
     {
         PlayerNotHitPlatform = true;
 
@@ -124,19 +129,23 @@ public class PlayerController : MonoBehaviour {
             Debug.Log("Player Repainted");
             GM.CurrentStreak = 0;
         }
-        else if (PlayerIsNeutral !=true && col.gameObject.tag != "Neutral_Platform" )
+      
+    }
+    private void OnCollisionExit(Collision col)
+    {
+        if (PlayerIsNeutral != true && col.gameObject.tag != "Neutral_Platform")
         {
-            if (ColorMatch.material !=Colors[5] && col.gameObject.GetComponent<MeshRenderer>().material.color != ColorMatch.material.color && PlayerStarted == true)
+            if (ColorMatch.material != Colors[5] && col.gameObject.GetComponent<MeshRenderer>().material.color != ColorMatch.material.color && PlayerStarted == true)
             {
                 Debug.Log("lost life");
-                CameraShaker.Instance.ShakeOnce(1, 10, 0, 2);
                 GM.CurrentStreak = 0;
+
+                CameraShaker.Instance.ShakeOnce(1, 10, 0, 2);
             }
         }
     }
-    private void OnCollisionEnter(Collision col)
+    private void OnTriggerEnter(Collider col)
     {
-
 
         PlayerNotHitPlatform = false;
 
@@ -147,34 +156,88 @@ public class PlayerController : MonoBehaviour {
         }
         if (col.gameObject.tag == "Kill_Platform")
         {
+
+            transform.position = PlayerDeathPortalPosition.transform.position;
+
+
+           PlayerDeathStateBlackOut(255f,0.5f);
+
+
+
             Debug.Log("Game Over!");
         }
         if (col.gameObject.tag == "Red_Platform")
         {
+            if(playerColor != PlayerController.PlayerColor.Red)
+            {
+                if (GM.CurrentStreak != 0)
+                {
+                    GM.CurrentStreak = 0;
+
+                    CameraShaker.Instance.ShakeOnce(1, 10, 0, 2);
+                }
+            }
             playerColor = PlayerController.PlayerColor.Red;
             GM.CurrentStreak++;
             Debug.Log("Player red");
         }
         if (col.gameObject.tag == "Blue_Platform")
         {
+            if(playerColor != PlayerController.PlayerColor.Blue)
+            {
+                if (GM.CurrentStreak != 0)
+                {
+                    GM.CurrentStreak = 0;
+
+                    CameraShaker.Instance.ShakeOnce(1, 10, 0, 2);
+                }
+            }
             playerColor = PlayerController.PlayerColor.Blue;
             GM.CurrentStreak++;
             Debug.Log("Player blue");
         }
         if (col.gameObject.tag == "Yellow_Platform")
         {
+            if (playerColor != PlayerController.PlayerColor.Yellow)
+            {
+                if (GM.CurrentStreak != 0)
+                {
+                    GM.CurrentStreak = 0;
+
+                    CameraShaker.Instance.ShakeOnce(1, 10, 0, 2);
+                }
+            }
             playerColor = PlayerController.PlayerColor.Yellow;
             GM.CurrentStreak++;
             Debug.Log("Player yellow");
         }
         if (col.gameObject.tag == "Purple_Platform")
         {
+            if (playerColor != PlayerController.PlayerColor.Purple)
+            {
+                if (GM.CurrentStreak != 0)
+                {
+                    GM.CurrentStreak = 0;
+
+                    CameraShaker.Instance.ShakeOnce(1, 10, 0, 2);
+                }
+            }
             playerColor = PlayerController.PlayerColor.Purple;
             GM.CurrentStreak++;
             Debug.Log("Player purple");
         }
         if (col.gameObject.tag == "Green_Platform")
         {
+            if (playerColor != PlayerController.PlayerColor.Green)
+            {
+                if(GM.CurrentStreak!=0)
+                {
+                    GM.CurrentStreak = 0;
+
+                    CameraShaker.Instance.ShakeOnce(1, 10, 0, 2);
+                }
+
+            }
             playerColor = PlayerColor.Green;
             GM.CurrentStreak++;
             Debug.Log("Player green");
@@ -183,24 +246,20 @@ public class PlayerController : MonoBehaviour {
 
     private void PlayerDeathStateWhiteOut()
     {
-        DeathTimer= DeathTimer+0.001f;
-        //PlayerDeathCameraShake = CameraShaker.Instance.StartShake(1, 10, 1);
-        //Debug.Log(PlayerDeathCameraShake.CurrentState);
-        if (PlayerStarted == true && velocity<-50)
+       
+    }
+    private IEnumerator PlayerDeathStateBlackOut(float aValue, float aTime)
+    {
+      
+        Debug.Log("Blacking out");
+        float alpha = DeathBlackOut.color.a;
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
         {
-            DeathWhiteOut.color = new Color(1f, 1f, 1f, Mathf.PingPong(Time.fixedTime * -velocity * 0.002f*DeathTimer, 255f));
-            //PlayerDeathCameraShake.StartFadeIn(0);
-            if(DeathWhiteOut.color.a >= 1f)
-            {
-
-                PlayerDeathState();
-            }
+            Color newColor = new Color(0, 0, 0, Mathf.Lerp(alpha, aValue, t));
+            DeathBlackOut.color = newColor;
+            yield return null;
         }
-        else
-        {
-            DeathTimer = 0;
-            DeathWhiteOut.color = new Color(1f, 1f, 1f, 0f);
-        }
+    
     }
 
     private void PlayerDeathState()

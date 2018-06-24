@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class PlatformDespawn : MonoBehaviour {
 
-    private void OnCollisionExit(Collision col)
+    private void OnTriggerExit(Collider col)
     {
         if(col.gameObject.tag == "Player")
         {
             StartCoroutine(ScaleOverTime(2f));
+        }
+        if (col.gameObject.tag == "Player" && gameObject.name =="Start_Platform")
+        {
+            StartCoroutine(ScaleOverTime(1f));
         }
     }
 
